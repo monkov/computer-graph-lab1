@@ -1,0 +1,100 @@
+h3 {
+  font-weight: 700;
+}
+
+.tabs {
+  margin-top: 12px;
+  display: flex;
+  font-size: 16px;
+  justify-content: space-between;
+
+  .tab {
+    cursor: pointer;
+    width: 50%;
+    display: flex;
+    font-weight: 500;
+    justify-content: left;
+    padding: 16px 0;
+    position: relative;
+    transition: background-color 0.2s ease-in-out;
+
+    &:active {
+      cursor: default;
+    }
+
+    .underline {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #000;
+    }
+  }
+}
+
+.content {
+  min-height: 150px;
+  user-select: none;
+  margin-top: 12px;
+  overflow-y: auto;
+  height: 70vh;
+  position: relative;
+}
+
+.rangeInput {
+  margin-top: 12px;
+
+  input {
+    width: 100%;
+    position: relative;
+    &::after {
+      content: "0";
+      top: 18px;
+      position: absolute;
+      left: 0;
+    }
+
+    &::before {
+      content: "2*Pi";
+      top: 18px;
+      position: absolute;
+      right: 0;
+    }
+  }
+}
+
+.slider {
+  position: relative;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+
+  &.hide {
+    transform: scale(0.5);
+    opacity: 0;
+    width: 100%;
+    position: absolute;
+  }
+}
+
+.twoInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 12px;
+  margin-top: 12px;
+
+  &.withMargin {
+    margin-top: 12px;
+  }
+}
+
+.section {
+  margin-top: 16px;
+  border-top: solid 1px #21212120;
+  padding-top: 12px;
+
+  h4 {
+    font-weight: bold;
+    font-size: 14px;
+  }
+}
