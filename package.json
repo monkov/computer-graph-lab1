@@ -1,7 +1,7 @@
 {
   "name": "comp-graph",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "index.html",
   "author": "Anton Monkov",
   "license": "MIT",
   "scripts": {
