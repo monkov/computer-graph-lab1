@@ -431,6 +431,21 @@ const ManipulateContent: FC = () => {
     onSubmit: () => console.log('Submit')
   })
 
+  const { values: projectiveValues, handleChange: handleProjectiveValuesChange, errors: projectiveErrors } = useFormik({
+    initialValues: {
+      xx: 100,
+      xy: 0,
+      wx: 1,
+      yx: 0,
+      yy: 100,
+      wy: 1,
+      ox: 0,
+      oy: 0,
+      wo: 300
+    },
+    onSubmit: () => console.log('Submit')
+  })
+
   const [rotateValuesDebounced] = useDebounce(rotateValues, 5)
 
   useEffect(() => {
@@ -440,6 +455,20 @@ const ManipulateContent: FC = () => {
   useEffect(() => {
     state.scene.get().updateFilterById(createAffineFilter(affineValues.xx, affineValues.xy, affineValues.yx, affineValues.yy, affineValues.ox, affineValues.oy))
   }, [affineValues])
+
+  // useEffect(() => {
+  //   state.scene.get().updateFilterById(createProjectiveFilter(
+  //     projectiveValues.xx,
+  //     projectiveValues.xy,
+  //     projectiveValues.wx,
+  //     projectiveValues.yx,
+  //     projectiveValues.yy,
+  //     projectiveValues.wy,
+  //     projectiveValues.ox,
+  //     projectiveValues.oy,
+  //     projectiveValues.wo
+  //   ))
+  // }, [projectiveValues])
 
   return (<>
     <h4>Rotate</h4>
@@ -518,6 +547,74 @@ const ManipulateContent: FC = () => {
             error={affineErrors.oy}
             label='OY'
             value={affineValues.oy}
+        />
+      </div>
+    </div>
+    <div className={styles.section}>
+      <h4>Projective transformation</h4>
+      <div className={styles.threeInputs}>
+        <Input
+            name='xx'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.xx}
+            label='XX'
+            value={projectiveValues.xx}
+        />
+        <Input
+            name='xy'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.xy}
+            label='XY'
+            value={projectiveValues.xy}
+        />
+        <Input
+            name='wx'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.wx}
+            label='WX'
+            value={projectiveValues.wx}
+        />
+        <Input
+            name='yx'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.yx}
+            label='YX'
+            value={projectiveValues.yx}
+        />
+        <Input
+            name='yy'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.yy}
+            label='YY'
+            value={projectiveValues.yy}
+        />
+        <Input
+            name='wy'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.wy}
+            label='WY'
+            value={projectiveValues.wy}
+        />
+        <Input
+            name='ox'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.ox}
+            label='OX'
+            value={projectiveValues.ox}
+        />
+        <Input
+            name='oy'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.oy}
+            label='OY'
+            value={projectiveValues.oy}
+        />
+        <Input
+            name='wo'
+            onDefaultChange={handleProjectiveValuesChange}
+            error={projectiveErrors.wo}
+            label='WO'
+            value={projectiveValues.wo}
         />
       </div>
     </div>

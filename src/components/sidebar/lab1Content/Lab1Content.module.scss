@@ -38,6 +38,7 @@ h3 {
   user-select: none;
   margin-top: 12px;
   overflow-y: auto;
+  max-width: 450px;
   height: 70vh;
   position: relative;
 }
@@ -80,6 +81,17 @@ h3 {
 .twoInputs {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-gap: 12px;
+  margin-top: 12px;
+
+  &.withMargin {
+    margin-top: 12px;
+  }
+}
+
+.threeInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 12px;
   margin-top: 12px;
 

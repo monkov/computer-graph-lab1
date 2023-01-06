@@ -6,12 +6,16 @@ export const createRotationFilter = (shiftX: number, shiftY: number, angle: numb
   createFilter((x: number, y: number) => Filters.rotation(x, y, shiftX, shiftY, angle), true, Filters.ROTATION)
 
 export const createAffineFilter = (xx: number, xy: number, yx: number, yy: number, ox: number, oy: number): FiltersFunc =>
-  createFilter((x: number, y: number) => Filters.affineTransform(x, y, xx, xy, yx, yy, ox, oy), false, Filters.ROTATION)
+  createFilter((x: number, y: number) => Filters.affineTransform(x, y, xx, xy, yx, yy, ox, oy), false, Filters.AFFINE)
+
+export const createProjectiveFilter = (xx: number, xy: number, wx: number, yx: number, yy: number, wy: number, ox: number, oy: number, wo: number): FiltersFunc =>
+  createFilter((x: number, y: number) => Filters.projectiveTransform(x, y, xx, xy, wx, yx, yy, wy, ox, oy, wo), false, Filters.PROJECTIVE)
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Filters {
   public static readonly ROTATION = 'rotation'
   public static readonly AFFINE = 'affine'
+  public static readonly PROJECTIVE = 'projective'
 
   public static scale (x: number, y: number, scale: number): Pos {
     return [x * scale, y * scale]
@@ -22,7 +26,6 @@ export default class Filters {
   }
 
   public static shift (x: number, y: number, shiftX: number, shiftY: number): Pos {
-    console.log(shiftY, shiftX)
     return [x + shiftX, y + shiftY]
   }
 
@@ -65,5 +68,14 @@ export default class Filters {
         [ox, oy, 1]
       ],
       x, y)
+  }
+
+  public static projectiveTransform (x: number, y: number, xx: number, xy: number, wx: number, yx: number, yy: number, wy: number, ox: number, oy: number, wo: number): Pos {
+    return Filters.transform(
+      [
+        [xx * wx * 10, xy * wx * 10, wx],
+        [yx * wy * 10, yy * wy * 10, wy],
+        [ox * wo * 10, oy * wo * 10, wo]
+      ], x, y)
   }
 }

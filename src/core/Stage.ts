@@ -103,6 +103,7 @@ export default class Stage {
   }
 
   public updateFilterById (filter: FiltersFunc): void {
+    console.log('updateFilterById')
     const filterInx = this.filters.findIndex((value) => value.id === filter.id)
     if (filterInx !== -1) {
       this.filters.splice(filterInx, 1)
