@@ -22,9 +22,10 @@ export default class Line extends BaseElement implements Drawable {
     const [x1, y1] = this.start
     const [x2, y2] = this.end
 
+    // @ts-expect-error
+    window.fl = this.filters
     this.ctx.beginPath()
     this.ctx.strokeStyle = '#000'
-    console.log(...this.filters(x1, y1))
     this.ctx.moveTo(...this.filters(x1, y1))
     this.ctx.lineTo(...this.filters(x2, y2))
     this.ctx.stroke()

@@ -6,7 +6,6 @@ import { motion } from 'framer-motion'
 import { Input } from '../../input/Input'
 import { useFormik } from 'formik'
 import { useCompGraphData } from '../../../providers/CompGraphDataProvider'
-import { createAffineFilter, createRotationFilter } from '../../../core/Filters'
 import { useDebounce } from 'use-debounce'
 
 const BuildContent: FC = () => {
@@ -449,11 +448,18 @@ const ManipulateContent: FC = () => {
   const [rotateValuesDebounced] = useDebounce(rotateValues, 5)
 
   useEffect(() => {
-    state.scene.get().updateFilterById(createRotationFilter(rotateValuesDebounced.shiftX, rotateValuesDebounced.shiftY, rotateValuesDebounced.angle / 1000 * Math.PI))
+    state.scene.get().addRotationFilter(rotateValuesDebounced.angle, rotateValuesDebounced.shiftX, rotateValuesDebounced.shiftY)
   }, [rotateValuesDebounced])
 
   useEffect(() => {
-    state.scene.get().updateFilterById(createAffineFilter(affineValues.xx, affineValues.xy, affineValues.yx, affineValues.yy, affineValues.ox, affineValues.oy))
+    state.scene.get().addAffineFilter(
+      parseFloat(String(affineValues.xx) === '' ? '0' : String(affineValues.xx)),
+      parseFloat(String(affineValues.xy) === '' ? '0' : String(affineValues.xy)),
+      parseFloat(String(affineValues.yx) === '' ? '0' : String(affineValues.yx)),
+      parseFloat(String(affineValues.yy) === '' ? '0' : String(affineValues.yy)),
+      parseFloat(String(affineValues.ox) === '' ? '0' : String(affineValues.ox)),
+      parseFloat(String(affineValues.oy) === '' ? '0' : String(affineValues.oy))
+    )
   }, [affineValues])
 
   // useEffect(() => {

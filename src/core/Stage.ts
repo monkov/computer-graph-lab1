@@ -1,7 +1,7 @@
 import { Element, FiltersFunc, Pos, Scene } from './types'
 import Grid from './elements/Grid'
 import Builder from './Builder'
-import Filters, { createFilter } from './Filters'
+import Filters, { createAffineFilter, createFilter, createRotationFilter } from './Filters'
 
 export default class Stage {
   // eslint-disable-next-line accessor-pairs
@@ -18,6 +18,8 @@ export default class Stage {
 
   private _dimensions: [number, number] = [1280, 720]
 
+  private applyFilters: (x: number, y: number, isGrid: boolean) => Pos = (x: number, y: number, isGrid: boolean) => [0, 0]
+
   private readonly filters: FiltersFunc[] = []
 
   private config: Scene = {
@@ -28,23 +30,35 @@ export default class Stage {
   }
 
   constructor () {
-    this.filters.push(createFilter((x: number, y: number) => Filters.reverse(x, y, this._dimensions[0], this._dimensions[1])))
     this.filters.push(createFilter((x: number, y: number) => Filters.scale(x, y, this.config.scale)))
-    this.filters.push(createFilter((x: number, y: number) => Filters.shift(x, y, this.config.shiftX, this.config.shiftY), true))
+    this.filters.push(createFilter((x: number, y: number) => Filters.shift(x, y, this.config.shiftX * this.config.scale, this.config.shiftY * this.config.scale), true))
+
+    this.calculateApplyFilters()
   }
 
   public updateScene (scene: Scene): void {
     this.config = { ...this.config, ...scene }
+    this.calculateApplyFilters()
     this.draw()
   }
 
+  private calculateApplyFilters (): void {
+    const reverseFilterInx = this.filters.findIndex((filter) => filter.id === Filters.REVERSE)
+    if (reverseFilterInx !== -1) {
+      this.filters.splice(reverseFilterInx, 1)
+    }
+    this.filters.push(createFilter((x: number, y: number) => Filters.reverse(x, y, this._dimensions[0], this._dimensions[1]), false, Filters.REVERSE))
+    this.applyFilters = (x: number, y: number, isGrid: boolean = false): Pos => this.filters.reduce<Pos>((res, filter) => {
+      return isGrid && ((filter?.disableForGrid) === true) ? res : filter.exec(...res)
+    }, [x, y])
+  }
+
   public draw (): void {
-    console.log('Draw called!')
+    console.log('Draw called!', this.filters)
 
     this._canvasCtx?.clearRect(0, 0, this._dimensions[0], this._dimensions[1])
 
-    const applyFilters = (x: number, y: number, isGrid: boolean = false): Pos =>
-      this.filters.reduceRight<Pos>((res, filter) => isGrid && ((filter?.disableForGrid) === true) ? res : filter.exec(...res), [x, y])
+    const applyFilters = this.applyFilters
 
     if (this._canvasCtx != null) {
       const baseProps = {
@@ -102,14 +116,63 @@ export default class Stage {
     this.draw()
   }
 
+  public removeFilterById (filter: FiltersFunc): void {
+    const filterInx = this.filters.indexOf(filter)
+    if (filterInx === -1) {
+      return
+    }
+    this.filters.splice(filterInx, 1)
+    this.draw()
+  }
+
+  public addRotationFilter (angle: number, shiftX: number, shiftY: number): void {
+    const filterInx = this.filters.findIndex((value) => value.id === Filters.ROTATION)
+    const filter = createRotationFilter(
+      shiftX * this.config.scale + this.config.shiftX * this.config.scale,
+      shiftY * this.config.scale + this.config.shiftY * this.config.scale,
+      angle / 1000 * Math.PI
+    )
+
+    if (filterInx !== -1) {
+      this.filters[filterInx] = filter
+    } else {
+      this.filters.push(filter)
+    }
+
+    this.calculateApplyFilters()
+    this.draw()
+  }
+
+  public addAffineFilter (xx: number, xy: number, yx: number, yy: number, ox: number, oy: number): void {
+    const filterInx = this.filters.findIndex((value) => value.id === Filters.AFFINE)
+
+    const filter = createAffineFilter(
+      xx,
+      xy,
+      yx,
+      yy,
+      ox * this.config.scale,
+      oy * this.config.scale
+    )
+
+    if (filterInx !== -1) {
+      this.filters[filterInx] = filter
+    } else {
+      this.filters.push(filter)
+    }
+
+    this.calculateApplyFilters()
+    this.draw()
+  }
+
   public updateFilterById (filter: FiltersFunc): void {
-    console.log('updateFilterById')
     const filterInx = this.filters.findIndex((value) => value.id === filter.id)
     if (filterInx !== -1) {
       this.filters.splice(filterInx, 1)
     }
 
     this.filters.push(filter)
+    this.calculateApplyFilters()
     this.draw()
   }
 }

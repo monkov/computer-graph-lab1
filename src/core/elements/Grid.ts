@@ -22,6 +22,9 @@ export default class Grid extends BaseElement implements Drawable {
 
     this.ctx.lineWidth = 1
 
+    // @ts-expect-error
+    window.fg = this.filters
+
     for (let i = 0; i < width; i += 1) {
       if (i === 1) {
         this.ctx.stroke()

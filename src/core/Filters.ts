@@ -16,6 +16,7 @@ export default class Filters {
   public static readonly ROTATION = 'rotation'
   public static readonly AFFINE = 'affine'
   public static readonly PROJECTIVE = 'projective'
+  public static readonly REVERSE = 'reverse'
 
   public static scale (x: number, y: number, scale: number): Pos {
     return [x * scale, y * scale]
@@ -26,7 +27,11 @@ export default class Filters {
   }
 
   public static shift (x: number, y: number, shiftX: number, shiftY: number): Pos {
-    return [x + shiftX, y + shiftY]
+    return Filters.transform([
+      [1, 0, 0],
+      [0, 1, 0],
+      [shiftX, shiftY, 1]
+    ], x, y)
   }
 
   public static transform (matrix: Matrix, x: number, y: number): Pos {
@@ -73,9 +78,9 @@ export default class Filters {
   public static projectiveTransform (x: number, y: number, xx: number, xy: number, wx: number, yx: number, yy: number, wy: number, ox: number, oy: number, wo: number): Pos {
     return Filters.transform(
       [
-        [xx * wx * 10, xy * wx * 10, wx],
-        [yx * wy * 10, yy * wy * 10, wy],
-        [ox * wo * 10, oy * wo * 10, wo]
+        [xx * wx, xy * wx, wx],
+        [yx * wy, yy * wy, wy],
+        [ox * wo, oy * wo, wo]
       ], x, y)
   }
 }
