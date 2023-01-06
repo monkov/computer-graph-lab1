@@ -1,7 +1,7 @@
 import { Element, FiltersFunc, Pos, Scene } from './types'
 import Grid from './elements/Grid'
 import Builder from './Builder'
-import Filters, { createAffineFilter, createFilter, createRotationFilter } from './Filters'
+import Filters, { createAffineFilter, createFilter, createProjectiveFilter, createRotationFilter } from './Filters'
 
 export default class Stage {
   // eslint-disable-next-line accessor-pairs
@@ -116,8 +116,8 @@ export default class Stage {
     this.draw()
   }
 
-  public removeFilterById (filter: FiltersFunc): void {
-    const filterInx = this.filters.indexOf(filter)
+  public removeFilterById (filter: string): void {
+    const filterInx = this.filters.findIndex((fil) => fil.id === filter)
     if (filterInx === -1) {
       return
     }
@@ -165,13 +165,27 @@ export default class Stage {
     this.draw()
   }
 
-  public updateFilterById (filter: FiltersFunc): void {
-    const filterInx = this.filters.findIndex((value) => value.id === filter.id)
+  public addProjectiveFilter (xx: number, xy: number, wx: number, yx: number, yy: number, wy: number, ox: number, oy: number, wo: number): void {
+    const filterInx = this.filters.findIndex((value) => value.id === Filters.PROJECTIVE)
+
+    const filter = createProjectiveFilter(
+      xx * this.config.scale,
+      xy * this.config.scale,
+      wx,
+      yx * this.config.scale,
+      yy * this.config.scale,
+      wy,
+      ox * this.config.scale,
+      oy * this.config.scale,
+      wo
+    )
+
     if (filterInx !== -1) {
-      this.filters.splice(filterInx, 1)
+      this.filters[filterInx] = filter
+    } else {
+      this.filters.push(filter)
     }
 
-    this.filters.push(filter)
     this.calculateApplyFilters()
     this.draw()
   }

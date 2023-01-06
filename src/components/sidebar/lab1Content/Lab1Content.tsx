@@ -7,6 +7,7 @@ import { Input } from '../../input/Input'
 import { useFormik } from 'formik'
 import { useCompGraphData } from '../../../providers/CompGraphDataProvider'
 import { useDebounce } from 'use-debounce'
+import Filters from '../../../core/Filters'
 
 const BuildContent: FC = () => {
   const state = useCompGraphData()
@@ -440,7 +441,8 @@ const ManipulateContent: FC = () => {
       wy: 1,
       ox: 0,
       oy: 0,
-      wo: 300
+      wo: 300,
+      enabled: false
     },
     onSubmit: () => console.log('Submit')
   })
@@ -462,19 +464,23 @@ const ManipulateContent: FC = () => {
     )
   }, [affineValues])
 
-  // useEffect(() => {
-  //   state.scene.get().updateFilterById(createProjectiveFilter(
-  //     projectiveValues.xx,
-  //     projectiveValues.xy,
-  //     projectiveValues.wx,
-  //     projectiveValues.yx,
-  //     projectiveValues.yy,
-  //     projectiveValues.wy,
-  //     projectiveValues.ox,
-  //     projectiveValues.oy,
-  //     projectiveValues.wo
-  //   ))
-  // }, [projectiveValues])
+  useEffect(() => {
+    if (projectiveValues.enabled) {
+      state.scene.get().addProjectiveFilter(
+        parseFloat(String(projectiveValues.xx) === '' ? '0' : String(projectiveValues.xx)),
+        parseFloat(String(projectiveValues.xy) === '' ? '0' : String(projectiveValues.xy)),
+        parseFloat(String(projectiveValues.wx) === '' ? '0' : String(projectiveValues.wx)),
+        parseFloat(String(projectiveValues.yx) === '' ? '0' : String(projectiveValues.yx)),
+        parseFloat(String(projectiveValues.yy) === '' ? '0' : String(projectiveValues.yy)),
+        parseFloat(String(projectiveValues.wy) === '' ? '0' : String(projectiveValues.wy)),
+        parseFloat(String(projectiveValues.ox) === '' ? '0' : String(projectiveValues.ox)),
+        parseFloat(String(projectiveValues.oy) === '' ? '0' : String(projectiveValues.oy)),
+        parseFloat(String(projectiveValues.wo) === '' ? '0' : String(projectiveValues.wo))
+      )
+    } else {
+      state.scene.get().removeFilterById(Filters.PROJECTIVE)
+    }
+  }, [projectiveValues])
 
   return (<>
     <h4>Rotate</h4>
@@ -558,6 +564,16 @@ const ManipulateContent: FC = () => {
     </div>
     <div className={styles.section}>
       <h4>Projective transformation</h4>
+      <div className={styles.checkboxSection}>
+        <input
+            type={'checkbox'}
+            name={'enabled'}
+            onChange={handleProjectiveValuesChange}
+            checked={projectiveValues.enabled}
+        />
+        Enabled
+      </div>
+
       <div className={styles.threeInputs}>
         <Input
             name='xx'
