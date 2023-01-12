@@ -292,7 +292,6 @@ const BuildContent: FC = () => {
     }
 
     scene.elements.push(...[arrows] as Element[])
-    console.log('Update')
     state.scene.get().updateScene(scene)
 
     setDisabledFieldsValues({ innerFigureLine: innerLineLength, outerFigureRightLine: lineOuterRightLength })

@@ -57,13 +57,13 @@ export default class Stage {
     this.draw()
   }
 
-  private calculateApplyFilters (): void {
+  private calculateApplyFilters (notApply: string[] = []): void {
     const reverseFilterInx = this.filters.findIndex((filter) => filter.id === Filters.REVERSE)
     if (reverseFilterInx !== -1) {
       this.filters.splice(reverseFilterInx, 1)
     }
     this.filters.push(createFilter((x: number, y: number) => Filters.reverse(x, y, this._dimensions[0], this._dimensions[1]), false, Filters.REVERSE))
-    this.applyFilters = (x: number, y: number, isGrid: boolean = false): Pos => this.filters.reduce<Pos>((res, filter) => {
+    this.applyFilters = (x: number, y: number, isGrid: boolean = false): Pos => this.filters.filter((filter) => !notApply.includes(filter.id ?? '*')).reduce<Pos>((res, filter) => {
       return isGrid && ((filter?.disableForGrid) === true) ? res : filter.exec(...res)
     }, [x, y])
   }
@@ -93,6 +93,12 @@ export default class Stage {
         if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab === Lab.V1) {
           (new Arrows({ ...baseProps, ...arrowsConfig, filters: (x, y) => baseProps.filters(x, y, true) })).draw({})
           this.config.elements[arrowsIndex].shadow = true
+        } else if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab === Lab.V2) {
+          this.calculateApplyFilters([Filters.ROTATION])
+          const arrow = new Arrows({ ...baseProps, ...arrowsConfig, filters: (x: number, y: number) => this.applyFilters(x, y, false) })
+          arrow.draw({})
+          this.config.elements[arrowsIndex].shadow = true
+          this.calculateApplyFilters()
         }
       }
 
