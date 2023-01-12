@@ -106,6 +106,7 @@ export default class Builder {
       startAngle: circle.startAngle,
       endAngle: circle.endAngle,
       centerX: circle.centerX,
+      fill: circle.fill,
       centerY: circle.centerY,
       dimensions: base.dimensions,
       filters: base.filters,

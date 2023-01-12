@@ -7,6 +7,7 @@ export interface CircleProps extends BaseElementProps {
   r: number
   centerX: number
   centerY: number
+  fill?: string
   reverse: boolean
 }
 
@@ -17,8 +18,9 @@ export default class Circle extends BaseElement implements Drawable {
   private readonly centerX: number = 0
   private readonly centerY: number = 0
   private readonly reverse: boolean = false
+  private readonly fill: string = '#000'
 
-  constructor ({ startAngle, endAngle, centerY, centerX, dimensions, ctx, filters, r, id, reverse }: CircleProps) {
+  constructor ({ startAngle, endAngle, centerY, centerX, dimensions, ctx, filters, r, id, reverse, fill }: CircleProps) {
     super({ dimensions, ctx, filters, id })
     this.endAngle = endAngle
     this.startAngle = startAngle
@@ -26,6 +28,7 @@ export default class Circle extends BaseElement implements Drawable {
     this.centerY = centerY
     this.r = r
     this.reverse = reverse
+    this.fill = fill ?? this.fill
   }
 
   public getStartAndEndPos (): [Pos, Pos] {
@@ -37,7 +40,8 @@ export default class Circle extends BaseElement implements Drawable {
 
   public draw (props: any): void {
     this.ctx.beginPath()
-    this.ctx.strokeStyle = props?.color ?? '#000'
+
+    this.ctx.strokeStyle = props?.color ?? this.fill
 
     if (this.reverse) {
       this.startAngle += Math.PI

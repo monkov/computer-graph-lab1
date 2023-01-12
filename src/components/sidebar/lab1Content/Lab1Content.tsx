@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import styles from './Lab1Content.module.scss'
 import classNames from 'classnames'
-import { Element, ElementRules, ElementType, Lab, Scene, Tabs } from '../../../core/types'
+import { CircleElement, Element, ElementRules, ElementType, Lab, Scene, Tabs } from '../../../core/types'
 import { motion } from 'framer-motion'
 import { Input } from '../../input/Input'
 import { useFormik } from 'formik'
@@ -456,6 +456,20 @@ export const ManipulateContent: FC = () => {
 
   useEffect(() => {
     state.scene.get().addRotationFilter(rotateValuesDebounced.angle, rotateValuesDebounced.shiftX, rotateValuesDebounced.shiftY)
+    const point: CircleElement = {
+      type: ElementType.CIRCLE,
+      startAngle: 0,
+      endAngle: 2 * Math.PI,
+      fill: 'red',
+      reverse: false,
+      centerX: rotateValuesDebounced.shiftX,
+      centerY: rotateValuesDebounced.shiftY,
+      id: 'rotate-point',
+      r: 0.3
+    }
+    state.scene.get().updateScene({
+      elements: [point]
+    })
   }, [rotateValuesDebounced])
 
   useEffect(() => {

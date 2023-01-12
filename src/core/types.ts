@@ -64,6 +64,7 @@ export interface CircleElement extends Element {
   r: number
   centerX: number
   centerY: number
+  fill?: string
   reverse: boolean
 }
 
