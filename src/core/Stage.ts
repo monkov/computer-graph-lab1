@@ -18,6 +18,14 @@ export default class Stage {
 
   private _dimensions: [number, number] = [1280, 720]
 
+  public getDimensions (): Pos {
+    return this._dimensions
+  }
+
+  public getScale (): number {
+    return this.config.scale
+  }
+
   private applyFilters: (x: number, y: number, isGrid: boolean) => Pos = (x: number, y: number, isGrid: boolean) => [0, 0]
 
   private readonly filters: FiltersFunc[] = []
@@ -36,8 +44,14 @@ export default class Stage {
     this.calculateApplyFilters()
   }
 
-  public updateScene (scene: Scene): void {
-    this.config = { ...this.config, ...scene }
+  public clearScene (): void {
+    this._canvasCtx?.clearRect(0, 0, this._dimensions[0], this._dimensions[1])
+    this.config.elements = []
+  }
+
+  public updateScene (scene: Partial<Scene>): void {
+    const elements = [...this.config.elements.filter((element) => !(scene.elements ?? []).map(({ id }) => id).includes(element.id)), ...(scene.elements ?? [])]
+    this.config = { ...this.config, ...scene, elements }
     this.calculateApplyFilters()
     this.draw()
   }

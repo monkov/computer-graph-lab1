@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { Layout } from './components/layout/Layout'
 import styles from './index.module.scss'
 import { CompGraphDataProvider } from './providers/CompGraphDataProvider'
+import { enableLegendStateReact } from '@legendapp/state/react'
+
+enableLegendStateReact()
 
 const App: FC = () => {
   return (

@@ -1,7 +1,17 @@
-import { CircleElement, Drawable, Element, ElementRules, ElementType, LineElement, Scene } from './types'
+import {
+  CircleElement,
+  Drawable,
+  Element,
+  ElementRules,
+  ElementType,
+  LineElement,
+  NicomedesCarhoidElement,
+  Scene
+} from './types'
 import Line from './elements/Line'
 import { BaseElementProps } from './elements/BaseElement'
 import Circle from './elements/Circle'
+import NicomedesCarhoid from './elements/NicomedesCarhoid'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Builder {
@@ -24,6 +34,10 @@ export default class Builder {
       result = this.buildCircle(element, this.base)
     }
 
+    if (Builder.isNicomedesCarhoid(element)) {
+      result = this.buildNicomedesCarhoid(element, this.base)
+    }
+
     if (result !== null) {
       this.buildedElements.push(result)
     }
@@ -41,7 +55,6 @@ export default class Builder {
     if (line.bindRules !== undefined && line.bindRules.length !== 0) {
       line.bindRules.forEach(({ rule, element }) => {
         const motherElement = this.buildedElements.find((el) => el.id === element)
-        console.log('mother', motherElement, this.buildedElements)
         if (motherElement === undefined) {
           return
         }
@@ -91,6 +104,27 @@ export default class Builder {
       dimensions: base.dimensions,
       filters: base.filters,
       ctx: base.ctx
+    })
+  }
+
+  private static isNicomedesCarhoid (element: Element): element is NicomedesCarhoidElement {
+    return element.type === ElementType.NicomedesCarhoid
+  }
+
+  private buildNicomedesCarhoid (carhoid: NicomedesCarhoidElement, base: BaseElementProps): NicomedesCarhoid {
+    return new NicomedesCarhoid({
+      id: carhoid.id,
+      a: carhoid.a,
+      b: carhoid.b,
+      enableTagnet: carhoid.enableTagnet,
+      enableNormal: carhoid.enableNormal,
+      enableAsymptotes: carhoid.enableAsymptotes,
+      enablePDots: carhoid.enablePDots,
+      testPos: carhoid.testPos,
+      highlight: carhoid.highlight,
+      ctx: base.ctx,
+      filters: base.filters,
+      dimensions: base.dimensions
     })
   }
 }

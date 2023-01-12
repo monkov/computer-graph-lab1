@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import styles from './Layout.module.scss'
 import classNames from 'classnames'
 import { Sidebar } from '../sidebar/Sidebar'
@@ -8,6 +8,12 @@ import { Stage } from '../stage/Stage'
 
 export const Layout: FC = () => {
   const state = useCompGraphData()
+  const [currentLab, setCurrentLab] = useState<Lab>(Lab.V1)
+
+  state.lab.onChange((lab) => {
+    setCurrentLab(lab)
+    state.scene.get().clearScene()
+  })
 
   return (
       <div className={styles.root}>
@@ -15,13 +21,13 @@ export const Layout: FC = () => {
               <h2>CompGraph<span>.</span></h2>
               <div className={styles.labs}>
                   <div className={classNames(styles.labsItem, {
-                    [styles.active]: state.lab.get() === Lab.V1
-                  })}>Lab 1</div>
+                    [styles.active]: currentLab === Lab.V1
+                  })} onClick={() => state.lab.set(Lab.V1)}>Lab 1</div>
                   <div className={classNames(styles.labsItem, {
-                    [styles.active]: state.lab.get() === Lab.V2
-                  })}>Lab 2</div>
+                    [styles.active]: currentLab === Lab.V2
+                  })} onClick={() => state.lab.set(Lab.V2)}>Lab 2</div>
                   <div className={classNames(styles.labsItem, {
-                    [styles.active]: state.lab.get() === Lab.V3
+                    [styles.active]: currentLab === Lab.V3
                   })}>Lab 3</div>
               </div>
           </div>

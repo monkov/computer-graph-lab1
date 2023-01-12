@@ -288,8 +288,6 @@ const BuildContent: FC = () => {
     state.scene.get().updateScene(scene)
 
     setDisabledFieldsValues({ innerFigureLine: innerLineLength, outerFigureRightLine: lineOuterRightLength })
-
-    console.log('Update', scene)
   }, [values])
 
   return (
@@ -408,7 +406,7 @@ const BuildContent: FC = () => {
   )
 }
 
-const ManipulateContent: FC = () => {
+export const ManipulateContent: FC = () => {
   const state = useCompGraphData()
   const { values: rotateValues, handleChange: handleRotateValuesChange, errors: rotateErrors } = useFormik({
     initialValues: {

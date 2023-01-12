@@ -37,20 +37,20 @@ export default class Circle extends BaseElement implements Drawable {
 
   public draw (props: any): void {
     this.ctx.beginPath()
-    this.ctx.strokeStyle = '#000'
+    this.ctx.strokeStyle = props?.color ?? '#000'
 
     if (this.reverse) {
       this.startAngle += Math.PI
       this.endAngle += Math.PI
     }
 
-    const step = 0.005
+    const step = 0.01
     for (let i = this.startAngle; i < this.endAngle; i += step) {
       const l = i + step
 
       this.ctx.moveTo(...this.filters(this.r * Math.cos(i) + this.centerX, this.r * Math.sin(i) + this.centerY))
       this.ctx.lineTo(...this.filters(this.r * Math.cos(l) + this.centerX, this.r * Math.sin(l) + this.centerY))
-      this.ctx.stroke()
     }
+    this.ctx.stroke()
   }
 }

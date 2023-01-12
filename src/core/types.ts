@@ -19,6 +19,7 @@ export interface Scene {
 export enum ElementType {
   LINE = 'line',
   CIRCLE = 'circle',
+  NicomedesCarhoid = 'nicomedes_carhoid',
   GRID = 'grid',
 }
 
@@ -57,6 +58,21 @@ export interface CircleElement extends Element {
   centerX: number
   centerY: number
   reverse: boolean
+}
+
+export interface NicomedesCarhoidElement extends Element {
+  type: ElementType.NicomedesCarhoid
+  a: number
+  b: number
+  enableTagnet?: boolean
+  enableNormal?: boolean
+  enableAsymptotes?: boolean
+  enablePDots?: boolean
+  testPos: number
+  highlight?: {
+    from: number
+    to: number
+  }
 }
 
 export interface Drawable {

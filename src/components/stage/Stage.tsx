@@ -9,8 +9,8 @@ export const Stage: FC = () => {
     state.scene.set((stage) => {
       const stageEl = document.getElementById('stage')
       if (stageEl != null) {
-        const width = stageEl.offsetWidth * 2
-        const height = stageEl.offsetHeight * 2;
+        const width = stageEl.offsetWidth
+        const height = stageEl.offsetHeight;
         (stageEl as HTMLCanvasElement).width = width;
         (stageEl as HTMLCanvasElement).height = height
         const canvasCtx = (stageEl as HTMLCanvasElement).getContext('2d')

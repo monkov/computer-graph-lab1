@@ -63,6 +63,60 @@ h3 {
       right: 0;
     }
   }
+
+  &.animation {
+    input {
+      &::after {
+        content: "-4";
+        top: 18px;
+        position: absolute;
+        left: 0;
+      }
+
+      &::before {
+        content: "4";
+        top: 18px;
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
+}
+
+.control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.time {
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+}
+
+.btns {
+  display: flex;
+  font-size: 14px;
+  gap: 6px;
+
+  .btn {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  .text {
+    margin-top: 14px;
+  }
 }
 
 .slider {
