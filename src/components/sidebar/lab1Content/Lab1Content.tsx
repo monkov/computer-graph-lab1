@@ -22,7 +22,7 @@ const BuildContent: FC = () => {
 
   const { values, errors, handleChange } = useFormik({
     initialValues: {
-      scale: 10,
+      scale: 7,
       shiftX: 50,
       shiftY: 50,
       outerFigureUpLine: 20,
@@ -292,6 +292,7 @@ const BuildContent: FC = () => {
     }
 
     scene.elements.push(...[arrows] as Element[])
+    console.log('Update')
     state.scene.get().updateScene(scene)
 
     setDisabledFieldsValues({ innerFigureLine: innerLineLength, outerFigureRightLine: lineOuterRightLength })
