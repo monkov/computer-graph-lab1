@@ -1,7 +1,8 @@
-import { Element, FiltersFunc, Pos, Scene } from './types'
+import { Element, FiltersFunc, Lab, Pos, Scene } from './types'
 import Grid from './elements/Grid'
 import Builder from './Builder'
 import Filters, { createAffineFilter, createFilter, createProjectiveFilter, createRotationFilter } from './Filters'
+import Arrows from './elements/Arrows'
 
 export default class Stage {
   // eslint-disable-next-line accessor-pairs
@@ -85,6 +86,15 @@ export default class Stage {
       const builder = new Builder(this.config, baseProps);
 
       (new Grid({ ...baseProps, scale: this.config.scale, filters: (x, y) => baseProps.filters(x, y, true) })).draw()
+
+      const arrowsIndex = this.config.elements.findIndex((element) => Builder.isArrows(element))
+      if (arrowsIndex !== -1) {
+        const arrowsConfig = this.config.elements[arrowsIndex]
+        if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab === Lab.V1) {
+          (new Arrows({ ...baseProps, ...arrowsConfig, filters: (x, y) => baseProps.filters(x, y, true) })).draw({})
+          this.config.elements.splice(arrowsIndex, 1)
+        }
+      }
 
       this.config.elements.forEach((element) => {
         builder.build(element)?.draw()

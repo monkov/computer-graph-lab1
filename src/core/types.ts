@@ -20,6 +20,7 @@ export enum ElementType {
   LINE = 'line',
   CIRCLE = 'circle',
   NicomedesCarhoid = 'nicomedes_carhoid',
+  ARROWS = 'arrrows',
   GRID = 'grid',
 }
 
@@ -42,6 +43,12 @@ export interface Element {
   type: ElementType
   bindRules?: Binding[]
   shadow?: boolean
+}
+
+export interface ArrowsElement extends Element {
+  id: 'arrows'
+  type: ElementType.ARROWS
+  lab: Lab
 }
 
 export interface LineElement extends Element {

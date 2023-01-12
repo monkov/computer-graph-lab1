@@ -1,4 +1,5 @@
 import {
+  ArrowsElement,
   CircleElement,
   Drawable,
   Element,
@@ -12,6 +13,7 @@ import Line from './elements/Line'
 import { BaseElementProps } from './elements/BaseElement'
 import Circle from './elements/Circle'
 import NicomedesCarhoid from './elements/NicomedesCarhoid'
+import Arrows from './elements/Arrows'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Builder {
@@ -38,6 +40,10 @@ export default class Builder {
       result = this.buildNicomedesCarhoid(element, this.base)
     }
 
+    if (Builder.isArrows(element)) {
+      result = this.buildArrows(element, this.base)
+    }
+
     if (result !== null) {
       this.buildedElements.push(result)
     }
@@ -45,7 +51,7 @@ export default class Builder {
     return result
   }
 
-  private static isLine (element: Element): element is LineElement {
+  public static isLine (element: Element): element is LineElement {
     return element.type === ElementType.LINE
   }
 
@@ -88,7 +94,7 @@ export default class Builder {
     })
   }
 
-  private static isCircle (element: Element): element is CircleElement {
+  public static isCircle (element: Element): element is CircleElement {
     return element.type === ElementType.CIRCLE
   }
 
@@ -107,7 +113,7 @@ export default class Builder {
     })
   }
 
-  private static isNicomedesCarhoid (element: Element): element is NicomedesCarhoidElement {
+  public static isNicomedesCarhoid (element: Element): element is NicomedesCarhoidElement {
     return element.type === ElementType.NicomedesCarhoid
   }
 
@@ -122,6 +128,20 @@ export default class Builder {
       enablePDots: carhoid.enablePDots,
       testPos: carhoid.testPos,
       highlight: carhoid.highlight,
+      ctx: base.ctx,
+      filters: base.filters,
+      dimensions: base.dimensions
+    })
+  }
+
+  public static isArrows (element: Element): element is ArrowsElement {
+    return element.type === ElementType.ARROWS
+  }
+
+  private buildArrows (arrows: ArrowsElement, base: BaseElementProps): Arrows {
+    return new Arrows({
+      lab: arrows.lab,
+      id: arrows.id,
       ctx: base.ctx,
       filters: base.filters,
       dimensions: base.dimensions

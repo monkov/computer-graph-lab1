@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import styles from './Lab1Content.module.scss'
 import classNames from 'classnames'
-import { Element, ElementRules, ElementType, Scene, Tabs } from '../../../core/types'
+import { Element, ElementRules, ElementType, Lab, Scene, Tabs } from '../../../core/types'
 import { motion } from 'framer-motion'
 import { Input } from '../../input/Input'
 import { useFormik } from 'formik'
@@ -285,6 +285,13 @@ const BuildContent: FC = () => {
 
     scene.elements.push(...[circleInner2] as Element[])
 
+    const arrows = {
+      lab: Lab.V1,
+      type: ElementType.ARROWS,
+      id: 'arrows'
+    }
+
+    scene.elements.push(...[arrows] as Element[])
     state.scene.get().updateScene(scene)
 
     setDisabledFieldsValues({ innerFigureLine: innerLineLength, outerFigureRightLine: lineOuterRightLength })

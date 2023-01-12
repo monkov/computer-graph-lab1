@@ -4,10 +4,13 @@ import classNames from 'classnames'
 import styles from '../lab1Content/Lab1Content.module.scss'
 import { useFormik } from 'formik'
 import { useCompGraphData } from '../../../providers/CompGraphDataProvider'
-import { ElementType, NicomedesCarhoidElement } from '../../../core/types'
+import { ElementType, Lab, NicomedesCarhoidElement, Pos } from '../../../core/types'
 import Timeline from '../../../core/Timeline'
 import * as yup from 'yup'
 import { ManipulateContent } from '../lab1Content/Lab1Content'
+
+const getShift = (dimensions: Pos, scale: number): Pos =>
+  [Math.round(dimensions[0] / scale / 2), Math.round(dimensions[1] / scale / 2)]
 
 export const Lab2Content: FC = () => {
   const state = useCompGraphData()
@@ -16,12 +19,12 @@ export const Lab2Content: FC = () => {
     const dimensions = state.scene.get().getDimensions()
     const scale = state.scene.get().getScale()
 
-    return [Math.floor(dimensions[0] / scale / 2), Math.floor(dimensions[1] / scale / 2)]
+    return getShift(dimensions, scale)
   }, [state])
 
   const { values, handleChange, errors, setFieldValue } = useFormik({
     initialValues: {
-      scale: 10,
+      scale: 8,
       shiftX: initialShift[0],
       shiftY: initialShift[1],
       a: -4,
@@ -89,12 +92,29 @@ export const Lab2Content: FC = () => {
       enablePDots: values.enablePDots,
       testPos: parseFloat(values.testPosT.toString())
     }
-    state.scene.get().updateScene({
+
+    const arrows = {
+      lab: Lab.V2,
+      type: ElementType.ARROWS,
+      id: 'arrows'
+    }
+
+    const scene = {
       scale: values.scale,
       shiftY: values.shiftY,
       shiftX: values.shiftX,
-      elements: [nc]
-    })
+      elements: [nc, arrows]
+    }
+
+    if (scene.scale !== state.scene.get().getScale()) {
+      const shift = getShift(state.scene.get().getDimensions(), scene.scale)
+      scene.shiftX = shift[0]
+      scene.shiftY = shift[1]
+      setFieldValue('shiftX', shift[0]).then(() => {}).catch(() => {})
+      setFieldValue('shiftY', shift[1]).then(() => {}).catch(() => {})
+    }
+
+    state.scene.get().updateScene(scene)
   }, [values])
 
   const handlePlay = (): void => {
