@@ -2,6 +2,7 @@ export enum Lab {
   V1 = 'v1',
   V2 = 'v2',
   V3 = 'v3',
+  V7 = 'v7',
 }
 
 export enum Tabs {
@@ -13,6 +14,7 @@ export interface Scene {
   scale: number
   shiftX: number
   shiftY: number
+  disableGrid?: boolean
   elements: Element[]
 }
 
@@ -22,6 +24,7 @@ export enum ElementType {
   NicomedesCarhoid = 'nicomedes_carhoid',
   ARROWS = 'arrrows',
   GRID = 'grid',
+  FRACTAL = 'fractal'
 }
 
 export enum ElementRules {
@@ -83,6 +86,12 @@ export interface NicomedesCarhoidElement extends Element {
   }
 }
 
+export interface FractalElement extends Element {
+  type: ElementType.FRACTAL
+  k: FractalPos[]
+  iterations: number
+}
+
 export interface Drawable {
   id: string
   draw: (props?: any) => void
@@ -90,6 +99,18 @@ export interface Drawable {
 }
 
 export type Pos = [number, number]
+// a, b, d, e, c, f, p
+export type FractalPos = [number, number, number, number, number, number, number]
+
+export const createFractalPos = (
+  a: number,
+  b: number,
+  d: number,
+  e: number,
+  c: number,
+  f: number,
+  p: number
+): FractalPos => [a, b, d, e, c, f, p]
 
 export type FiltersFuncExec = (x: number, y: number) => Pos
 

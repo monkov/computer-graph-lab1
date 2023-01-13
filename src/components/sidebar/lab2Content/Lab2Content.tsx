@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useRef } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { Input } from '../../input/Input'
 import classNames from 'classnames'
 import styles from '../lab1Content/Lab1Content.module.scss'
@@ -14,6 +14,7 @@ const getShift = (dimensions: Pos, scale: number): Pos =>
 
 export const Lab2Content: FC = () => {
   const state = useCompGraphData()
+  const [lineLength, setLineLength] = useState(0)
 
   const initialShift = useMemo(() => {
     const dimensions = state.scene.get().getDimensions()
@@ -117,6 +118,32 @@ export const Lab2Content: FC = () => {
     state.scene.get().updateScene(scene)
   }, [values])
 
+  useEffect(() => {
+    // trapezoidal rule
+    const arcLength = (a: number, b: number, from: number, to: number): number => {
+      const steps = 1000
+      const h = (to - from) / steps
+      let sum = 0
+
+      for (let i = 1; i < steps; i++) {
+        const theta = from + i * h
+        const r = a / Math.cos(theta) + b
+        const rDer = a * Math.sin(theta) / Math.pow(Math.cos(theta), 2)
+        const f = Math.sqrt(Math.pow(rDer, 2) + Math.pow(r, 2))
+        sum += f
+      }
+
+      return (h / 2) * (2 * sum)
+    }
+
+    setLineLength(arcLength(
+      values.a,
+      values.b,
+      parseFloat(values.figureHighlightFrom.toString()) * Math.PI,
+      parseFloat(values.figureHighlightTo.toString()) * Math.PI
+    ))
+  }, [values.a, values.b, values.figureHighlightFrom, values.figureHighlightTo])
+
   const handlePlay = (): void => {
     timeLine.current.play()
   }
@@ -215,6 +242,11 @@ export const Lab2Content: FC = () => {
           />
           <span className={styles.text}> * Pi</span>
         </div>
+        <Input<number>
+            label='Highlight Length:'
+            value={lineLength}
+            disabled
+        />
       </div>
      </div>
      <div className={styles.section}>

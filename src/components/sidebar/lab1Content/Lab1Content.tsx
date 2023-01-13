@@ -455,6 +455,7 @@ export const ManipulateContent: FC = () => {
   const [rotateValuesDebounced] = useDebounce(rotateValues, 5)
 
   useEffect(() => {
+    console.log(rotateValuesDebounced.shiftX, rotateValuesDebounced.shiftY)
     state.scene.get().addRotationFilter(rotateValuesDebounced.angle, rotateValuesDebounced.shiftX, rotateValuesDebounced.shiftY)
     const point: CircleElement = {
       type: ElementType.CIRCLE,
@@ -462,8 +463,8 @@ export const ManipulateContent: FC = () => {
       endAngle: 2 * Math.PI,
       fill: 'red',
       reverse: false,
-      centerX: rotateValuesDebounced.shiftX,
-      centerY: rotateValuesDebounced.shiftY,
+      centerX: parseFloat(rotateValuesDebounced.shiftX.toString()),
+      centerY: parseFloat(rotateValuesDebounced.shiftY.toString()),
       id: 'rotate-point',
       r: 0.3
     }

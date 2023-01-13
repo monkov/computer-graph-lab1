@@ -29,6 +29,9 @@ export const Layout: FC = () => {
                   <div className={classNames(styles.labsItem, {
                     [styles.active]: currentLab === Lab.V3
                   })}>Lab 3</div>
+                  <div onClick={() => state.lab.set(Lab.V7)} className={classNames(styles.labsItem, {
+                    [styles.active]: currentLab === Lab.V7
+                  })}>Lab 7</div>
               </div>
           </div>
           <Stage/>

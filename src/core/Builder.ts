@@ -4,7 +4,7 @@ import {
   Drawable,
   Element,
   ElementRules,
-  ElementType,
+  ElementType, FractalElement,
   LineElement,
   NicomedesCarhoidElement,
   Scene
@@ -14,6 +14,7 @@ import { BaseElementProps } from './elements/BaseElement'
 import Circle from './elements/Circle'
 import NicomedesCarhoid from './elements/NicomedesCarhoid'
 import Arrows from './elements/Arrows'
+import Fractal from './elements/Fractal'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Builder {
@@ -42,6 +43,10 @@ export default class Builder {
 
     if (Builder.isArrows(element)) {
       result = this.buildArrows(element, this.base)
+    }
+
+    if (Builder.isFractal(element)) {
+      result = this.buildFractal(element, this.base)
     }
 
     if (result !== null) {
@@ -143,6 +148,21 @@ export default class Builder {
     return new Arrows({
       lab: arrows.lab,
       id: arrows.id,
+      ctx: base.ctx,
+      filters: base.filters,
+      dimensions: base.dimensions
+    })
+  }
+
+  public static isFractal (element: Element): element is FractalElement {
+    return element.type === ElementType.FRACTAL
+  }
+
+  private buildFractal (fractal: FractalElement, base: BaseElementProps): Fractal {
+    return new Fractal({
+      id: fractal.id,
+      k: fractal.k,
+      iterations: fractal.iterations,
       ctx: base.ctx,
       filters: base.filters,
       dimensions: base.dimensions

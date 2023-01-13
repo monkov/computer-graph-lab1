@@ -52,7 +52,13 @@ export default class Stage {
 
   public updateScene (scene: Partial<Scene>): void {
     const elements = [...this.config.elements.filter((element) => !(scene.elements ?? []).map(({ id }) => id).includes(element.id)), ...(scene.elements ?? [])]
-    this.config = { ...this.config, ...scene, elements }
+    const newConfig = { ...this.config, ...scene, elements }
+    // Prevent useless reloads
+    if (JSON.stringify(this.config) === JSON.stringify(newConfig)) {
+      return
+    }
+
+    this.config = newConfig
     this.calculateApplyFilters()
     this.draw()
   }
@@ -83,10 +89,11 @@ export default class Stage {
         filters: applyFilters
       }
 
-      const builder = new Builder(this.config, baseProps);
+      const builder = new Builder(this.config, baseProps)
 
-      (new Grid({ ...baseProps, scale: this.config.scale, filters: (x, y) => baseProps.filters(x, y, true) })).draw()
-
+      if (this.config.disableGrid !== true) {
+        (new Grid({ ...baseProps, scale: this.config.scale, filters: (x, y) => baseProps.filters(x, y, true) })).draw()
+      }
       const arrowsIndex = this.config.elements.findIndex((element) => Builder.isArrows(element))
       if (arrowsIndex !== -1) {
         const arrowsConfig = { ...this.config.elements[arrowsIndex] }

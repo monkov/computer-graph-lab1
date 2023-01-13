@@ -174,3 +174,12 @@ h3 {
     }
   }
 }
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 12px;
+  b {
+    font-weight: bold;
+  }
+}

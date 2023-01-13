@@ -82,17 +82,6 @@ export default class NicomedesCarhoid extends BaseElement implements Drawable {
     const dyDt = drDt * Math.sin(t) + rTangent * Math.cos(t)
 
     if (this.enableTagnet) {
-      // Ver 1
-      const der = dyDt / dxDt
-
-      const y = yTangent + der * (0 - xTangent)
-
-      this.ctx.beginPath()
-      this.ctx.strokeStyle = '#f4a4d4'
-      this.ctx.moveTo(...this.filters(xTangent, yTangent))
-      this.ctx.lineTo(...this.filters(0, y))
-      this.ctx.stroke()
-
       // Ver 2
       this.ctx.stroke()
       this.ctx.beginPath()
@@ -103,32 +92,16 @@ export default class NicomedesCarhoid extends BaseElement implements Drawable {
     }
 
     if (this.enableNormal) {
-      // Normal ver 1
-      const slope = this.a * Math.sin(t) / Math.pow(Math.cos(t), 2)
-      const normalSlope = Math.pow(Math.cos(t), 2) / (this.a * Math.sin(t))
-
-      const x1 = xTangent + rTangent / (normalSlope + slope)
-      const y1 = yTangent + normalSlope * (x1 - xTangent)
-
-      const x1y1Rad = Math.atan(y1 / x1)
+      const tangetPointX = xTangent - dxDt
+      const tangetPointY = yTangent - dyDt
+      const x = tangetPointX - xTangent
+      const y = yTangent - tangetPointY
+      const rad = Math.atan(y / x) + Math.PI / 2
 
       this.ctx.beginPath()
-      this.ctx.moveTo(...this.filters(xTangent, yTangent))
-      this.ctx.strokeStyle = '#ff0000'
-      this.ctx.lineTo(...this.filters(10 * Math.cos(x1y1Rad), 10 * Math.sin(x1y1Rad)))
-      this.ctx.stroke()
-
-      // Normal ver 2
-
-      const yNormalTemp = yTangent + dyDt / dxDt * (0 - xTangent)
-      const rad = Math.atan(yNormalTemp - yTangent / -xTangent) + Math.PI / 2
-      const xNormal = 10 * Math.cos(rad)
-      const yNormal = 10 * Math.sin(rad)
-
-      this.ctx.beginPath()
-      this.ctx.moveTo(...this.filters(xTangent, yTangent))
+      this.ctx.moveTo(...this.filters(xTangent - 5 * Math.cos(rad), yTangent + 5 * Math.sin(rad)))
       this.ctx.strokeStyle = '#ff00ff'
-      this.ctx.lineTo(...this.filters(xNormal, yNormal))
+      this.ctx.lineTo(...this.filters(xTangent + 5 * Math.cos(rad), yTangent - 5 * Math.sin(rad)))
       this.ctx.stroke()
     }
 
