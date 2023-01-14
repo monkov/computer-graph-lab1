@@ -59,6 +59,9 @@ export default class Timeline {
     this.time = 0
     this.isPlaying = false
     this.execution(0, false)
+    if (this.endOfPlayCallback !== null) {
+      this.endOfPlayCallback()
+    }
   }
 
   public play (): void {
