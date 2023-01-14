@@ -8,7 +8,7 @@ import { Stage } from '../stage/Stage'
 
 export const Layout: FC = () => {
   const state = useCompGraphData()
-  const [currentLab, setCurrentLab] = useState<Lab>(Lab.V1)
+  const [currentLab, setCurrentLab] = useState<Lab>(Lab.V3)
 
   state.lab.onChange((lab) => {
     setCurrentLab(lab)
@@ -26,7 +26,7 @@ export const Layout: FC = () => {
                   <div className={classNames(styles.labsItem, {
                     [styles.active]: currentLab === Lab.V2
                   })} onClick={() => state.lab.set(Lab.V2)}>Lab 2</div>
-                  <div className={classNames(styles.labsItem, {
+                  <div onClick={() => state.lab.set(Lab.V3)} className={classNames(styles.labsItem, {
                     [styles.active]: currentLab === Lab.V3
                   })}>Lab 3</div>
                   <div onClick={() => state.lab.set(Lab.V7)} className={classNames(styles.labsItem, {

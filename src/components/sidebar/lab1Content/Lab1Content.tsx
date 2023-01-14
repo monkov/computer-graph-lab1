@@ -62,6 +62,7 @@ const BuildContent: FC = () => {
       scale: parseInt(String(scale)),
       shiftX: parseInt(String(shiftX)),
       shiftY: parseInt(String(shiftY)),
+      disableGrid: false,
       elements: []
     }
 

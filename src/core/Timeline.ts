@@ -4,6 +4,7 @@ export default class Timeline {
   private readonly animationTime: number
   private progressElementId: string | null = null
   private progressElement: HTMLElement | null = null
+  private endOfPlayCallback: (() => void) | null = null
   private time: number = 0
   private control: number = 0
   public isPlaying = false
@@ -44,6 +45,13 @@ export default class Timeline {
   public pause (): void {
     clearInterval(this.control)
     this.isPlaying = false
+    if (this.endOfPlayCallback !== null) {
+      this.endOfPlayCallback()
+    }
+  }
+
+  public handleEndOfPlay (callback: () => void): void {
+    this.endOfPlayCallback = callback
   }
 
   public reset (): void {
@@ -64,6 +72,9 @@ export default class Timeline {
         clearInterval(this.control)
         this.time = 0
         this.isPlaying = false
+        if (this.endOfPlayCallback !== null) {
+          this.endOfPlayCallback()
+        }
         return
       }
       setTimeout(() => {

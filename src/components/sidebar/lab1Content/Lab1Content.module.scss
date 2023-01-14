@@ -81,6 +81,24 @@ h3 {
       }
     }
   }
+
+  &.animationV3 {
+    input {
+      &::after {
+        content: "0";
+        top: 18px;
+        position: absolute;
+        left: 0;
+      }
+
+      &::before {
+        content: "final";
+        top: 18px;
+        position: absolute;
+        right: 0;
+      }
+    }
+  }
 }
 
 .control {
@@ -141,6 +159,10 @@ h3 {
   &.withMargin {
     margin-top: 12px;
   }
+
+  &.withoutMargin {
+    margin-top: 0;
+  }
 }
 
 .threeInputs {
@@ -181,5 +203,28 @@ h3 {
   grid-gap: 12px;
   b {
     font-weight: bold;
+  }
+}
+
+.pic {
+  position: absolute;
+  width: 800px;
+  height: auto;
+  left: 60px;
+  opacity: 0.2;
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.curveWrapper {
+  margin-top: 6px;
+  border-bottom: solid 1px #21212120;
+  padding-bottom: 12px;
+  .curveBlock {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }

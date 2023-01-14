@@ -24,7 +24,8 @@ export enum ElementType {
   NicomedesCarhoid = 'nicomedes_carhoid',
   ARROWS = 'arrrows',
   GRID = 'grid',
-  FRACTAL = 'fractal'
+  FRACTAL = 'fractal',
+  EngineeringCurve = 'engineering_curve'
 }
 
 export enum ElementRules {
@@ -58,6 +59,19 @@ export interface LineElement extends Element {
   type: ElementType.LINE
   start: Pos
   end: Pos
+}
+
+export interface EngineeringCurveElement extends Element {
+  type: ElementType.EngineeringCurve
+  a: Pos
+  b: Pos
+  c: Pos
+  d: Pos
+  wa: number
+  wb: number
+  wc: number
+  wd: number
+  enableDescriptors: boolean
 }
 
 export interface CircleElement extends Element {

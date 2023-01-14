@@ -97,7 +97,7 @@ export default class Stage {
       const arrowsIndex = this.config.elements.findIndex((element) => Builder.isArrows(element))
       if (arrowsIndex !== -1) {
         const arrowsConfig = { ...this.config.elements[arrowsIndex] }
-        if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab === Lab.V1) {
+        if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab !== Lab.V2) {
           (new Arrows({ ...baseProps, ...arrowsConfig, filters: (x, y) => baseProps.filters(x, y, true) })).draw({})
           this.config.elements[arrowsIndex].shadow = true
         } else if (Builder.isArrows(arrowsConfig) && arrowsConfig.lab === Lab.V2) {

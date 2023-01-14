@@ -14,7 +14,7 @@ const CompGraphDataContext = createContext<ObservableObject<CompGraphDataContext
 
 export const CompGraphDataProvider: FC<PropsWithChildren> = ({ children }) => {
   const state = useObservable<CompGraphDataContextProps>({
-    lab: window.location.search === '?lab2' ? Lab.V2 : Lab.V1,
+    lab: window.location.search === '?lab2' ? Lab.V2 : Lab.V3,
     scene: new Stage()
   })
 

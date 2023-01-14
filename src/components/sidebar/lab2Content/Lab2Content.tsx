@@ -104,7 +104,8 @@ export const Lab2Content: FC = () => {
       scale: values.scale,
       shiftY: values.shiftY,
       shiftX: values.shiftX,
-      elements: [nc, arrows]
+      elements: [nc, arrows],
+      disableGrid: false
     }
 
     if (scene.scale !== state.scene.get().getScale()) {

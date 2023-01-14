@@ -4,7 +4,7 @@ import {
   Drawable,
   Element,
   ElementRules,
-  ElementType, FractalElement,
+  ElementType, EngineeringCurveElement, FractalElement,
   LineElement,
   NicomedesCarhoidElement,
   Scene
@@ -15,6 +15,7 @@ import Circle from './elements/Circle'
 import NicomedesCarhoid from './elements/NicomedesCarhoid'
 import Arrows from './elements/Arrows'
 import Fractal from './elements/Fractal'
+import EngineeringCurve from './elements/EngineeringCurve'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Builder {
@@ -47,6 +48,10 @@ export default class Builder {
 
     if (Builder.isFractal(element)) {
       result = this.buildFractal(element, this.base)
+    }
+
+    if (Builder.isEngineeringCurve(element)) {
+      result = this.buildEngineeringCurve(element, this.base)
     }
 
     if (result !== null) {
@@ -163,6 +168,54 @@ export default class Builder {
       id: fractal.id,
       k: fractal.k,
       iterations: fractal.iterations,
+      ctx: base.ctx,
+      filters: base.filters,
+      dimensions: base.dimensions
+    })
+  }
+
+  public static isEngineeringCurve (element: Element): element is EngineeringCurveElement {
+    return element.type === ElementType.EngineeringCurve
+  }
+
+  private buildEngineeringCurve (engineeringCurve: EngineeringCurveElement, base: BaseElementProps): EngineeringCurve {
+    let start = engineeringCurve.a
+    let end = engineeringCurve.d
+    if (engineeringCurve.bindRules !== undefined && engineeringCurve.bindRules.length !== 0) {
+      engineeringCurve.bindRules.forEach(({ rule, element }) => {
+        const motherElement = this.buildedElements.find((el) => el.id === element)
+        if (motherElement === undefined) {
+          return
+        }
+        const [startPos, endPos] = motherElement.getStartAndEndPos()
+        if (rule === ElementRules.BindStartToStart) {
+          start = startPos
+        }
+
+        if (rule === ElementRules.BindEndToEnd) {
+          end = endPos
+        }
+
+        if (rule === ElementRules.BindStartToEnd) {
+          start = endPos
+        }
+
+        if (rule === ElementRules.BindEndToStart) {
+          end = startPos
+        }
+      })
+    }
+    return new EngineeringCurve({
+      id: engineeringCurve.id,
+      a: start,
+      b: engineeringCurve.b,
+      c: engineeringCurve.c,
+      d: end,
+      wa: engineeringCurve.wa,
+      wb: engineeringCurve.wb,
+      wc: engineeringCurve.wc,
+      wd: engineeringCurve.wd,
+      enableDescriptors: engineeringCurve.enableDescriptors,
       ctx: base.ctx,
       filters: base.filters,
       dimensions: base.dimensions
