@@ -56,12 +56,7 @@ export default class Timeline {
 
   public reset (): void {
     clearInterval(this.control)
-    this.time = 0
-    this.isPlaying = false
-    this.execution(0, false)
-    if (this.endOfPlayCallback !== null) {
-      this.endOfPlayCallback()
-    }
+    this.setProgress(0)
   }
 
   public play (): void {

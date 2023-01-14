@@ -1014,6 +1014,8 @@ const CurveSection: FC<CurveSectionProps> = ({ initialCurves }) => {
 
   const handleReset = (): void => {
     timeLine.current.reset()
+    setCurves(initialCurves)
+    initialCurves.forEach((curve, inx) => formControls[inx].current?.resetForm(curve))
   }
 
   useEffect(() => {
@@ -1125,11 +1127,11 @@ export const Lab3Content: FC = () => {
             error={errors.shiftY}
         />
       </div>
-      { enablePic && (
+       { enablePic && (
           <div className={styles.pic}>
             <img src={picImg} alt={'Scope'} />
           </div>
-      )}
+       )}
       <div className={styles.checkboxSection}>
         <input
             onChange={(e) => setEnablePic(e.target.checked)}
